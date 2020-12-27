@@ -4,12 +4,15 @@ var http = require('http'), //This module provides the HTTP server functionaliti
     fs = require('fs'), //This module allows to work witht the file system: read and write files back
     xmlParse = require('xslt-processor').xmlParse, //This module allows us to work with XML files
     xsltProcess = require('xslt-processor').xsltProcess, //The same module allows us to utilise XSL Transformations
-    xml2js = require('xml2js'); //This module does XML to JSON conversion and also allows us to get from JSON back to XML
+    xml2js = require('xml2js'),
+  //  Ajv = require('ajv').default,
+  //  ajv = new Ajv({allErrors: true}),
+    validator = require("xsd-schema-validator"); //This module does XML to JSON conversion and also allows us to get from JSON back to XML
 
 var router = express(); //We set our routing to be handled by Express
 var server = http.createServer(router); //This is where our server gets created
 
-router.use(express.static(path.resolve(__dirname, 'views'))); //We define the views folder as the one where all static content will be served
+router.use(express.static(__dirname)); //We define the views folder as the one where all static content will be served
 router.use(express.urlencoded({extended: true})); //We allow the data sent from the client to be coming in as part of the URL in GET and POST requests
 router.use(express.json()); //We include support for JSON that is coming from the client
 
@@ -33,7 +36,7 @@ function jsToXmlFile(filename, obj, cb) {
 
 router.get('/', function(req, res) {
 
-    res.render('index');
+    res.sendFile(__dirname+'/views/index.html');
 
 });
 
@@ -41,8 +44,8 @@ router.get('/get/html', function(req, res) {
 
     res.writeHead(200, {'Content-Type': 'text/html'}); //We are responding to the client that the content served back is HTML and the it exists (code 200)
 
-    var xml = fs.readFileSync('PaddysCafe.xml', 'utf8'); //We are reading in the XML file
-    var xsl = fs.readFileSync('PaddysCafe.xsl', 'utf8'); //We are reading in the XSL file
+    var xml = fs.readFileSync('xml/spa.xml', 'utf8'); //We are reading in the XML file
+    var xsl = fs.readFileSync('xml/spa.xsl', 'utf8'); //We are reading in the XSL file
 
     var doc = xmlParse(xml); //Parsing our XML file
     var stylesheet = xmlParse(xsl); //Parsing our XSL file

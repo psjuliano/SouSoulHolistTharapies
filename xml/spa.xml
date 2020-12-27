@@ -1,0 +1,42 @@
+<?xml version= "1.0" encoding= "utf-8" standalone="yes"?>
+<spa>
+<services>
+<entree>
+<item>
+Full Body Massage
+</item>
+<price>
+60.00
+</price>
+</entree>
+
+<entree>
+<item>
+Back, Neck and Shoulders Massage
+</item>
+<price>
+45.00
+</price>
+</entree>
+
+<entree>
+<item>
+Reiki and Aromatherapy
+</item>
+<price>
+50.00
+</price>
+</entree>
+
+<entree>
+<item>
+Reflexology
+</item>
+<price>
+50.00
+</price>
+</entree>
+</services>
+
+
+</spa>
