@@ -1,0 +1,28 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
+      {
+        "rm_item": "Testando"
+      }
+    ],
+    "required": [
+      "rm_item"
+    ],
+    "properties": {
+      "rm_item": {
+        "$id": "#/properties/rm_item",
+        "default": "",
+        "description": "An explanation about the purpose of this instance.",
+        "examples": [
+          "Testando"
+        ],
+        "title": "The rm_item schema",
+        "minLength": 4,
+        "type": "string"
+      }
+    }
+  }

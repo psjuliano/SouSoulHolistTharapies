@@ -1,0 +1,41 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
+      {
+        "add_item": "Reflexology",
+        "add_price": 45.00
+      }
+    ],
+    "required": [
+      "add_item",
+      "add_price"
+    ],
+    "properties": {
+      "add_item": {
+        "$id": "#/properties/add_item",
+        "default": "",
+        "description": "An explanation about the purpose of this instance.",
+        "examples": [
+          "Reflexology"
+        ],
+        "title": "The add_item schema",
+        "minLength": 4,
+        "type": "string"
+      },
+      "add_price": {
+        "$id": "#/properties/add_price",
+        "default": "",
+        "description": "An explanation about the purpose of this instance.",
+        "examples": [
+          "45.00"
+        ],
+        "title": "The add_price schema",
+        "minimum": 1.0,
+        "type": "number"
+      }
+    }
+  }
