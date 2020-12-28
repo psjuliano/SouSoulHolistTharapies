@@ -2,7 +2,7 @@ function draw_services(){
     $.ajax({
 
         url: '/get/html',
-        type: 'post',
+        type: 'get',
         cache: false,
         success: function(html){
             $('#services').append(html)
