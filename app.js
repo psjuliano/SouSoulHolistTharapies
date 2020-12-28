@@ -5,9 +5,9 @@ var http = require('http'), //This module provides the HTTP server functionaliti
     xmlParse = require('xslt-processor').xmlParse, //This module allows us to work with XML files
     xsltProcess = require('xslt-processor').xsltProcess, //The same module allows us to utilise XSL Transformations
     xml2js = require('xml2js'),
-  //  Ajv = require('ajv').default,
-  //  ajv = new Ajv({allErrors: true}),
-    validator = require("xsd-schema-validator"); //This module does XML to JSON conversion and also allows us to get from JSON back to XML
+    Ajv = require('ajv').default,
+    ajv = new Ajv({allErrors: true}),
+    validator = require('xsd-schema-validator'); //This module does XML to JSON conversion and also allows us to get from JSON back to XML
 
 var router = express(); //We set our routing to be handled by Express
 var server = http.createServer(router); //This is where our server gets created
@@ -56,30 +56,84 @@ router.get('/get/html', function(req, res) {
 
 });
 
-router.post('/post/json', function (req, res) {
+router.post('/post/json/addService', function (req, res) {
 
     function appendJSON(obj) {
-
+        obj.add_price = parseFloat(obj.add_price)
         console.log(obj)
+        var schema = fs.readFileSync(__dirname + "/jsons-schemas/addItem.schema.json", "utf-8")
+        schema = JSON.parse(schema)
+        var validate = ajv.compile(schema)
+        if(validate(obj)){
+            xmlFileToJs('xml/spa.xml', function (err, result) {
+                if (err) throw (err);
+                
+                result.spa.services[0].entree.push({'item': obj.add_item, 'price': obj.add_price});
 
-        xmlFileToJs('PaddysCafe.xml', function (err, result) {
-            if (err) throw (err);
-            
-            result.cafemenu.section[obj.sec_n].entree.push({'item': obj.item, 'price': obj.price});
+                console.log(JSON.stringify(result, null, "  "));
 
-            console.log(JSON.stringify(result, null, "  "));
-
-            jsToXmlFile('PaddysCafe.xml', result, function(err){
-                if (err) console.log(err);
+                jsToXmlFile('xml/spa.xml', result, function(err){
+                    if (err) console.log(err);
+                });
             });
-        });
+            res.write('valid input')
+        }
+        else{
+            res.write('invalid input')
+        }
+        res.end()
     };
 
     appendJSON(req.body);
-
-    res.redirect('back');
+    
 
 });
+
+router.post('/post/json/rmService', function(req,res){
+    function appendJSON(obj){
+        xmlFileToJs('xml/spa.xml', function (err, result) {
+            error = false
+            console.log(obj)
+            var schema = fs.readFileSync(__dirname + "/jsons-schemas/rmItem.schema.json", "utf-8")
+            schema = JSON.parse(schema)
+            var validate = ajv.compile(schema)
+            if(validate(obj)){
+                if (err) throw (err);
+                var item = obj.rm_item
+                var confirmation = false
+                var i = 0;
+                while(confirmation == false){
+                    try{
+                        if(item == result.spa.services[0].entree[i].item){ 
+                            result.spa.services[0].entree.splice(i,1)
+                            confirmation = true
+                        }
+                    }
+                    catch(e){
+                        confirmation = true
+                        error = true
+                    }
+                    i++
+                }
+                // console.log(JSON.stringify(result, null, "  "));
+                jsToXmlFile('xml/spa.xml', result, function(err){
+                    if (err) throw(err);
+                });
+                
+            }
+            else error = true
+
+            if(error) res.write("invalid input!")
+            else res.write("valid input!")
+
+            res.end()
+        })
+    }
+    appendJSON(req.body)
+    
+})
+
+router.post('/post/json/editService')
 
 server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function () {
     var addr = server.address();
