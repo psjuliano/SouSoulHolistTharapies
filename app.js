@@ -40,8 +40,12 @@ router.get('/', function(req, res) {
 
 });
 
-router.get('/get/html', function(req, res) {
+router.get('/schedule', function(req,res){
+    res.sendFile(__dirname+"/views/schedule.html")
+})
 
+router.get('/get/html', function(req, res) {
+    
     res.writeHead(200, {'Content-Type': 'text/html'}); //We are responding to the client that the content served back is HTML and the it exists (code 200)
 
     var xml = fs.readFileSync('xml/spa.xml', 'utf8'); //We are reading in the XML file
@@ -133,7 +137,53 @@ router.post('/post/json/rmService', function(req,res){
     
 })
 
-router.post('/post/json/editService')
+router.post('/post/json/editService', function(req, res){
+    function appendJSON(obj){
+        xmlFileToJs('xml/spa.xml', function (err, result) {
+            error = false
+            obj.editPrice = parseFloat(obj.editPrice)
+            console.log(obj)
+            
+            var schema = fs.readFileSync(__dirname + "/jsons-schemas/editItem.schema.json", "utf-8")
+            schema = JSON.parse(schema)
+            var validate = ajv.compile(schema)
+            if(validate(obj)){
+                if (err) throw (err);
+                var item = obj.editItem
+                var confirmation = false
+                var i = 0;
+                while(confirmation == false){
+                    try{
+                        if(item == result.spa.services[0].entree[i].item){ 
+                            result.spa.services[0].entree[i].item = obj.editItem
+                            result.spa.services[0].entree[i].price = obj.editPrice
+                            result.spa.services[0].entree[i].img = obj.editImg
+                            confirmation = true
+                        }
+                    }
+                    catch(e){
+                        confirmation = true
+                        error = true
+                    }
+                    i++
+                }
+                // console.log(JSON.stringify(result, null, "  "));
+                jsToXmlFile('xml/spa.xml', result, function(err){
+                    if (err) throw(err);
+                });
+                
+            }
+            else error = true
+
+            if(error) res.write("invalid input")
+            else res.write("valid input!")
+
+            res.end()
+        })
+    }
+
+    appendJSON(req.body)
+})
 
 server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function () {
     var addr = server.address();
