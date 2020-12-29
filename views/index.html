@@ -57,6 +57,7 @@
                 </div>
                 <div id="services" class="row mt-1 ">
             </div>
+            <hr>
             <div class="row mt-3 justify-content-md-center">
                 <div class="text-center col-lg-12 ">
                     <h1>Manage services</h1>
@@ -65,7 +66,7 @@
                             <div class="form-group">
                                 <input class="form-control mt-3" type="text"  id="addItem" placeholder="Item"/>
                                 <input class="form-control mt-3" type="text"  id="addPrice" placeholder="Price"/>
-                                <select id="img">
+                                <select class="form-control mt-3" id="addImg">
                                     <option value="Image 1"></option>
                                     <option value="Image 2"></option>
                                     <option value="Image 3"></option>
@@ -80,19 +81,48 @@
                                     <option value="Image 12"></option>
                                     <option value="Image 13"></option>
                                 </select>
-                                <button form="form-add" class="btn btn-success mt-3" id="btn-add">Add service</button>
+                                <button form="form-add" class="btn btn-success mt-3 btn-block" id="btn-add">Add service</button>
                             </div>
                         </form>
                     </div>
                     <div class="col col-lg-4">
                         <form id="form-rm">
                             <input class="form-control mt-3" type="text" id="rmItem" placeholder="Item"/>
-                            <button form="form-rm" class="btn btn-danger mt-3" id="btn-rm">Remove service</button>
+                            <button form="form-rm" class="btn btn-danger mt-3 btn-block" id="btn-rm">Remove service</button>
                         </form>
                     </div>
+                    <div class="col col-lg-4 mb-5">
+                        <div class="form-group">
+                            <form id="form-edit">
+                            
+                                <input class="form-control mt-3" type="text" id="editItem" placeholder="Item"/>
+                                <input class="form-control mt-3" type="text"  id="editPrice" placeholder="Price"/>
+                                <select class="form-control mt-3" id="editImg">
+                                    <option value="Image 1">Image 1</option>
+                                    <option value="Image 2">Image 2</option>
+                                    <option value="Image 3">Image 3</option>
+                                    <option value="Image 4">Image 4</option>
+                                    <option value="Image 5">Image 5</option>
+                                    <option value="Image 6">Image 6</option>
+                                    <option value="Image 7">Image 7</option>
+                                    <option value="Image 8">Image 8</option>
+                                    <option value="Image 9">Image 9</option>
+                                    <option value="Image 10">Image 10</option>
+                                    <option value="Image 11">Image 11</option>
+                                    <option value="Image 12">Image 12</option>
+                                    <option value="Image 13">Image 13</option>
+                                </select>
+                                <button form="form-edit" class="btn btn-warning mt-3 btn-block" id="btn-edit">Edit Service</button>
+                            </form>
+                        </div>
+                    </div>
+                    
                     
                 </div>
             </div>
         </div>
+        <footer class="footer bg-dark">
+            <div class="container text-center"><span>&copy; 2020</span></div>
+        </footer>
     </body>
 </html>
