@@ -5,25 +5,29 @@
     <entree>
       <item>Full Body Massage</item>
       <price>60.00</price>
-      <img></img>
+      <img>Image 4</img>
+      <specialOffer>false</specialOffer>
       <description/>
     </entree>
     <entree>
       <item>Back, Neck and Shoulders</item>
       <price>45.00</price>
-      <img></img>
+      <img>Image 3</img>
+      <specialOffer>false</specialOffer>
       <description/>
     </entree>
     <entree>
       <item>Reiki and Aromatherapy</item>
       <price>50.00</price>
-      <img></img>
+      <img>Image 2</img>
+      <specialOffer>true</specialOffer>
       <description/>
     </entree>
     <entree>
       <item>Reflexology</item>
-      <price>50.00</price>
-      <img>spa</img>
+      <price>45</price>
+      <img>Image 1</img>
+      <specialOffer>true</specialOffer>
       <description/>
     </entree>
   </services>

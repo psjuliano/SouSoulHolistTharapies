@@ -16,8 +16,16 @@
                             </h5>
                             <p><xsl:value-of select="description"></xsl:value-of></p>
 
-                            <a class="btn btn-primary">Book Now</a>
+                            <a href="/schedule" class="btn btn-primary">Book Now</a>
                         </div>
+                        <price specialOffer="true">
+                            <div class="card-footer price">
+                                <xsl:attribute name="specialOffer"><xsl:value-of select="specialOffer"></xsl:value-of></xsl:attribute>
+                                <small class="text-muted"> 
+                                <xsl:value-of select="price"/>
+                                </small>
+                            </div>
+                        </price>
                     </div>
                 </div>
             </xsl:if>
