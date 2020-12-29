@@ -1,5 +1,3 @@
-const { data } = require("jquery")
-
 function add_service(){
     var addItem = $('#addItem').val(),
         addPrice = $('#addPrice').val(),
@@ -47,18 +45,27 @@ function remove_service(){
     })
 }
 
-function editService(){
+function edit_service(){
+    var editItem = $('#editItem').val(),
+        editPrice = $('#editPrice').val(),
+        editImg = $('#editImg').val(),
+        data = {
+            editItem: editItem,
+            editPrice: editPrice,
+            editImg: editImg
+        };
+
     $.ajax({
-        url: 'post/json/editService',
+        url: '/post/json/editService',
         type: 'post',
         cache: false,
         data: data,
         success: function(html){
             if(html == "invalid input"){
-
+                alert("Invalid Input!")
             }
             else{
-                
+                alert("Service edited success!")
             }
         }
     })
@@ -70,5 +77,8 @@ $(document).ready(function(){
     })
     $('#btn-rm').on("click", function(){
         remove_service()
+    })
+    $('#btn-edit').on("click", function(){
+        edit_service()
     })
 })
