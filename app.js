@@ -36,56 +36,60 @@ function jsToXmlFile(filename, obj, cb) {
 
 router.get('/', function(req, res) {
 
-    res.sendFile(__dirname+'/views/index.html');
+    res.sendFile(__dirname+'/views/index.html'); // Sending file to route '/'
 
 });
 
 router.get('/schedule', function(req,res){
-    res.sendFile(__dirname+"/views/schedule.html")
+    res.sendFile(__dirname+"/views/schedule.html") // Sending file to route '/schedule'
 })
 
 router.get('/get/html', function(req, res) {
+    validator.validateXML({file: 'xml/spa.xml'}, 'xml/spa.xsd', (error, result) => {
+        if(result.valid){
+            res.writeHead(200, {'Content-Type': 'text/html'}); //We are responding to the client that the content served back is HTML and the it exists (code 200)
+
+            var xml = fs.readFileSync('xml/spa.xml', 'utf8'); //We are reading in the XML file
+            var xsl = fs.readFileSync('xml/spa.xsl', 'utf8'); //We are reading in the XSL file
+
+            var doc = xmlParse(xml); //Parsing our XML file
+            var stylesheet = xmlParse(xsl); //Parsing our XSL file
+
+            var result = xsltProcess(doc, stylesheet); //This does our XSL Transformation
+
+            res.end(result.toString()); //Send the result back to the user, but convert to type string first
+        }
+        else{
+            throw(error) // Send error to console
+        }
     
-    res.writeHead(200, {'Content-Type': 'text/html'}); //We are responding to the client that the content served back is HTML and the it exists (code 200)
-
-    var xml = fs.readFileSync('xml/spa.xml', 'utf8'); //We are reading in the XML file
-    var xsl = fs.readFileSync('xml/spa.xsl', 'utf8'); //We are reading in the XSL file
-
-    var doc = xmlParse(xml); //Parsing our XML file
-    var stylesheet = xmlParse(xsl); //Parsing our XSL file
-
-    var result = xsltProcess(doc, stylesheet); //This does our XSL Transformation
-
-    res.end(result.toString()); //Send the result back to the user, but convert to type string first
-
+    }); 
 });
 
 router.post('/post/json/addService', function (req, res) {
 
     function appendJSON(obj) {
-        obj.add_price = parseFloat(obj.add_price)
+        obj.add_price = parseFloat(obj.add_price) // Converting the price to float
         console.log(obj)
-        var schema = fs.readFileSync(__dirname + "/jsons-schemas/addItem.schema.json", "utf-8")
+        var schema = fs.readFileSync(__dirname + "/jsons-schemas/addItem.schema.json", "utf-8") // Declaring the schema variable
         schema = JSON.parse(schema)
-        var validate = ajv.compile(schema)
-        if(validate(obj)){
-            xmlFileToJs('xml/spa.xml', function (err, result) {
+        var validate = ajv.compile(schema) // Declaring the validate variable to validate using the schema
+        if(validate(obj)){ // Checking if the JSON is valid
+            xmlFileToJs('xml/spa.xml', function (err, result) { // Converting the xml file to JSON
                 if (err) throw (err);
                 
-                result.spa.services[0].entree.push({'item': obj.add_item, 'price': obj.add_price});
+                result.spa.services[0].entree.push({'item': obj.add_item, 'price': obj.add_price}); // Inserting a new data
 
-                console.log(JSON.stringify(result, null, "  "));
-
-                jsToXmlFile('xml/spa.xml', result, function(err){
+                jsToXmlFile('xml/spa.xml', result, function(err){// Converting JSON to xml and saving
                     if (err) console.log(err);
                 });
             });
-            res.write('valid input')
+            res.write('valid input') // Server response to client
         }
         else{
-            res.write('invalid input')
+            res.write('invalid input') // Server response to client
         }
-        res.end()
+        res.end() // Finishing the request
     };
 
     appendJSON(req.body);
@@ -93,9 +97,9 @@ router.post('/post/json/addService', function (req, res) {
 
 });
 
-router.post('/post/json/rmService', function(req,res){
+router.post('/post/json/rmService', function(req,res){// Post to remove a service
     function appendJSON(obj){
-        xmlFileToJs('xml/spa.xml', function (err, result) {
+        xmlFileToJs('xml/spa.xml', function (err, result) { // Converting an xml file to json
             error = false
             console.log(obj)
             var schema = fs.readFileSync(__dirname + "/jsons-schemas/rmItem.schema.json", "utf-8")
@@ -106,10 +110,10 @@ router.post('/post/json/rmService', function(req,res){
                 var item = obj.rm_item
                 var confirmation = false
                 var i = 0;
-                while(confirmation == false){
+                while(confirmation == false){// While not finding the item or giving error
                     try{
                         if(item == result.spa.services[0].entree[i].item){ 
-                            result.spa.services[0].entree.splice(i,1)
+                            result.spa.services[0].entree.splice(i,1) // Excluding json data at position i
                             confirmation = true
                         }
                     }
@@ -127,17 +131,18 @@ router.post('/post/json/rmService', function(req,res){
             }
             else error = true
 
-            if(error) res.write("invalid input!")
-            else res.write("valid input!")
+            if(error) res.write("invalid input!") // Server response to client
+            else res.write("valid input!") // Server response to client
 
-            res.end()
+            res.end() // Finishing the request
+
         })
     }
     appendJSON(req.body)
     
 })
 
-router.post('/post/json/editService', function(req, res){
+router.post('/post/json/editService', function(req, res){ // Post to edit some service
     function appendJSON(obj){
         xmlFileToJs('xml/spa.xml', function (err, result) {
             error = false
@@ -152,9 +157,9 @@ router.post('/post/json/editService', function(req, res){
                 var item = obj.editItem
                 var confirmation = false
                 var i = 0;
-                while(confirmation == false){
+                while(confirmation == false){ // While finding the item or giving error
                     try{
-                        if(item == result.spa.services[0].entree[i].item){ 
+                        if(item == result.spa.services[0].entree[i].item){ //  
                             result.spa.services[0].entree[i].item = obj.editItem
                             result.spa.services[0].entree[i].price = obj.editPrice
                             result.spa.services[0].entree[i].img = obj.editImg
