@@ -1,0 +1,53 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
+      {
+        "editItem": "dsadsa",
+        "editPrice": 2132,
+        "editImg": "Image 10"
+      }
+    ],
+    "required": [
+      "editItem",
+      "editPrice",
+      "editImg"
+    ],
+    "properties": {
+      "editItem": {
+        "$id": "#/properties/editItem",
+        "default": "",
+        "description": "An explanation about the purpose of this instance.",
+        "examples": [
+          "dsadsa"
+        ],
+        "title": "The editItem schema",
+        "minimum": 4,
+        "type": "string"
+      },
+      "editPrice": {
+        "$id": "#/properties/editPrice",
+        "default": 0,
+        "description": "An explanation about the purpose of this instance.",
+        "examples": [
+          2132
+        ],
+        "title": "The editPrice schema",
+        "minimum": 1.0,
+        "type": "number"
+      },
+      "editImg": {
+        "$id": "#/properties/editImg",
+        "type": "string",
+        "title": "The editImg schema",
+        "description": "An explanation about the purpose of this instance.",
+        "default": "",
+        "examples": [
+          "Image 10"
+        ]
+      }
+    }
+  }
